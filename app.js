@@ -1,9 +1,11 @@
 var express = require("express");
+var bodyParser = require("body-parser");
+
 
 var app = express();
 
 app.set("view engine",'ejs');
-
+app.use(bodyParser.urlencoded({extended:true}));
 
 app.get("/", (req, res)=>{
     res.render("homepage");
@@ -14,6 +16,16 @@ var campGrounds = [{name:"Camp-1", image:"https://www.freeimageslive.co.uk/files
 app.get("/campgrounds",(req,res)=>{
     res.render("campgrounds",{campGrounds:campGrounds});
     
+});
+
+app.post("/campgrounds",(req,res)=>{
+    var campObj = {name: req.body.name, image: req.body.image};
+    campGrounds.push(campObj);
+    res.redirect("/campgrounds");
+});
+
+app.get("/campgrounds/new", (req,res)=>{
+    res.render("newcampground");
 });
 
 app.listen(3000,"127.0.0.1",function(){
